@@ -59,6 +59,22 @@ if (ENABLE_OPENCL_LAYERINFO)
             ENVIRONMENT OPENCL_LAYERS=$<TARGET_FILE:PrintLayer>
             WORKING_DIRECTORY "${TEST_WORKING_DIRECTORY}"
     )
+
+    if (UNIX AND NOT APPLE)
+        set(NO_LAYER_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/no_opencl_layers")
+        file(MAKE_DIRECTORY "${NO_LAYER_DIRECTORY}")
+
+        add_test(
+            NAME cllayerinfo_no_layers_test
+            COMMAND cllayerinfo
+        )
+        set_tests_properties(cllayerinfo_no_layers_test
+            PROPERTIES
+                ENVIRONMENT "OPENCL_LAYERS=;OPENCL_LAYER_PATH=${NO_LAYER_DIRECTORY}"
+                PASS_REGULAR_EXPRESSION "No OpenCL layers found[.]"
+                WORKING_DIRECTORY "${TEST_WORKING_DIRECTORY}"
+        )
+    endif()
 endif()
 
 set_tests_properties(plugin_loader_test

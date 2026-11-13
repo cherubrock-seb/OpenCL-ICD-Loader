@@ -136,6 +136,8 @@ int main (int argc, char *argv[])
     (void)argv;
     run_silently(&khrIcdInitialize);
     const struct KHRLayer *layer = khrFirstLayer;
+    if (!layer)
+        printf("No OpenCL layers found.\n");
     while (layer)
     {
         printLayerInfo(layer);
